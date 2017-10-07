@@ -8,7 +8,9 @@ __all__ = [
 ]
 
 LOG_FILE = "/var/log/python-portscan/log"
-os.system("mkdir -p /var/log/python-portscan && touch /var/log/python-portscan/log")
+if not os.path.exists(os.path.dirname(LOG_FILE)):
+    os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
+open(LOG_FILE, 'a').close()
 logging.basicConfig(filename=LOG_FILE, level=logging.INFO)
 
 
