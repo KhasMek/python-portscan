@@ -70,7 +70,7 @@ class ScanObject:
         self.outfile = out_dir + "nmap-T-" + self.start_ip + ".out"
 
         if len(exclusion_string) > 0:
-            exclude = "--exclude " + exclusion_string[:-1]
+            exclude = " --exclude " + exclusion_string[:-1] + " "
         else:
             exclude = ""
 
@@ -81,5 +81,5 @@ class ScanObject:
         else:
             key = self.start_ip + "/" + self.subnet
 
-        self.command = "nmap -Pn -sT -p " + total_ports + " -oX " + self.outfile \
-                       + " " + exclude + " " + key + " > /dev/null 2>&1"
+        options = exclude + "-Pn -sT -p " + total_ports + " -oX " + self.outfile
+        self.command = {'options': options, 'target': key}

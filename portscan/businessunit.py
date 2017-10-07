@@ -9,6 +9,8 @@ from . import upload
 import libnmap.parser
 import os
 
+from libnmap.process import NmapProcess
+
 __all__ = [
     'BusinessUnit'
 ]
@@ -177,17 +179,13 @@ class BusinessUnit:
             self.scan_objs.append(BU_SO)
             self.machine_count = self.machine_count + BU_SO.GetMachineCount()
 
-        pids = []
         for obj in self.scan_objs:
-            pid = os.fork()
-            if pid != 0:
-                pids.append(pid)
-            else:
-                log.send_log(obj.command)
-                os.system(obj.command)
-                exit(0)
-        for i in pids:
-            os.waitpid(i, 0)
+            nmap_proc = NmapProcess(targets=obj.command['target'], options=obj.command['options'],
+                                    safe_mode=False)
+            log.send_log(nmap_proc.get_command_line())
+            nmap_proc.run_background()
+            while nmap_proc.is_running():
+                pass
 
     def ParseOutput(self, buisness_path=""):
         """Parse and assemble human readable csv report of all nmap results. """
