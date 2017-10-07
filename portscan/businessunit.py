@@ -5,11 +5,10 @@ from . import scanobject
 from . import upload
 
 # Standard Library Modules
-# from libnmap.parser import NmapParser
-import libnmap.parser
 import os
 
 from libnmap.process import NmapProcess
+from libnmap.parser import NmapParser
 
 __all__ = [
     'BusinessUnit'
@@ -215,7 +214,7 @@ class BusinessUnit:
             pass
 
         for obj in self.scan_objs:
-            nmap_report = libnmap.parser.NmapParser.parse_fromfile(obj.outfile)
+            nmap_report = NmapParser.parse_fromfile(obj.outfile)
             for scanned_hosts in nmap_report.hosts:
                 if scanned_hosts.is_up():
                     self.live_host = self.live_host + 1
