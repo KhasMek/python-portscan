@@ -239,7 +239,7 @@ class BusinessUnit:
                     self.live_host = self.live_host + 1
                 for port in scanned_hosts.get_ports():
                     nmap_obj = scanned_hosts.get_service(port[0], "tcp")
-                    if nmap_obj.state == "open" or nmap_obj.state == "open|filtered":
+                    if nmap_obj.state == "open":
                         out = [scanned_hosts.address, str(nmap_obj.port), nmap_obj.state, nmap_obj.service]
 
                         # append business type
