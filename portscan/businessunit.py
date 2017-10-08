@@ -6,6 +6,7 @@ from . import upload
 
 # Standard Library Modules
 import os
+import socket
 
 from libnmap.process import NmapProcess
 from libnmap.parser import NmapParser
@@ -186,6 +187,17 @@ class BusinessUnit:
             while nmap_proc.is_running():
                 pass
 
+    def TestPort(self, host, port):
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(5)
+        try:
+            s.connect((host, port))
+            s.close()
+            return True
+        except:
+            log.send_log(host + " " + port + " appears to be a false positive, excluding from report.")
+            return False
+
     def ParseOutput(self, buisness_path=""):
         """Parse and assemble human readable csv report of all nmap results. """
         if len(buisness_path) > 0:
@@ -221,28 +233,29 @@ class BusinessUnit:
                 for port in scanned_hosts.get_ports():
                     nmap_obj = scanned_hosts.get_service(port[0], "tcp")
                     if nmap_obj.state == "open" or nmap_obj.state == "open|filtered":
-                        out = [scanned_hosts.address, str(nmap_obj.port), nmap_obj.state, nmap_obj.service]
+                        if self.TestPort(scanned_hosts.address, nmap_obj.port):
+                            out = [scanned_hosts.address, str(nmap_obj.port), nmap_obj.state, nmap_obj.service]
 
-                        # append business type
-                        if len(buisness_path) > 0:
-                            out.append(master_dict.get(scanned_hosts.address, "") + "")
-                        else:
-                            out.append("")
-
-                        # append new or not
-                        if len(backup) > 0:
-                            if scanned_hosts.address in backup and str(nmap_obj.port) in backup[scanned_hosts.address]:
-                                out.append("*")
+                            # append business type
+                            if len(buisness_path) > 0:
+                                out.append(master_dict.get(scanned_hosts.address, "") + "")
                             else:
                                 out.append("")
+
+                            # append new or not
+                            if len(backup) > 0:
+                                if scanned_hosts.address in backup and str(nmap_obj.port) in backup[scanned_hosts.address]:
+                                    out.append("*")
+                                else:
+                                    out.append("")
+                            else:
+                                out.append("*")
+
+                            master_out.append(",".join(out))
+
+                            self.stats[nmap_obj.state] = self.stats[nmap_obj.state] + 1
                         else:
-                            out.append("*")
-
-                        master_out.append(",".join(out))
-
-                        self.stats[nmap_obj.state] = self.stats[nmap_obj.state] + 1
-                    else:
-                        self.stats[nmap_obj.state] = self.stats[nmap_obj.state] + 1
+                            self.stats[nmap_obj.state] = self.stats[nmap_obj.state] + 1
             log.send_log("File " + obj.outfile + " parsed.")
         return master_out
 
