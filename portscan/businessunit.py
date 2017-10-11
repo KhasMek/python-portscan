@@ -9,10 +9,27 @@ import os
 
 from libnmap.process import NmapProcess
 from libnmap.parser import NmapParser
+from queue import Queue
+from threading import Thread
 
 __all__ = [
     'BusinessUnit'
 ]
+
+
+class NmapWorker(Thread):
+    def __init__(self, queue):
+        Thread.__init__(self)
+        self.queue = queue
+
+    def run(self):
+        while True:
+            # Get the work from the queue and expand the tuple
+            target, options = self.queue.get()
+            nmap_proc = NmapProcess(targets=target, options=options, safe_mode=False)
+            log.send_log(nmap_proc.get_command_line())
+            nmap_proc.run()
+            self.queue.task_done()
 
 
 # Business Uni
@@ -178,13 +195,15 @@ class BusinessUnit:
             self.scan_objs.append(BU_SO)
             self.machine_count = self.machine_count + BU_SO.GetMachineCount()
 
+        queue = Queue()
+        # Run several threads to be more time efficient
+        for x in range(4):
+            worker = NmapWorker(queue)
+            worker.daemon = True
+            worker.start()
         for obj in self.scan_objs:
-            nmap_proc = NmapProcess(targets=obj.command['target'], options=obj.command['options'],
-                                    safe_mode=False)
-            log.send_log(nmap_proc.get_command_line())
-            nmap_proc.run_background()
-            while nmap_proc.is_running():
-                pass
+            queue.put((obj.command['target'], obj.command['options']))
+        queue.join()
 
     def ParseOutput(self, buisness_path=""):
         """Parse and assemble human readable csv report of all nmap results. """
