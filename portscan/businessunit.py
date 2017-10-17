@@ -100,9 +100,9 @@ class BusinessUnit:
 
         # output directory
         self.nmap_dir = self.path + "nmap-" + self.business_unit + "/"
-        if not self.CheckExist(self.nmap_dir):
+        if not os.path.exists(self.nmap_dir):
             log.send_log(self.nmap_dir + " does not exist... creating now")
-            os.system("mkdir " + self.nmap_dir)
+            os.makedirs(self.nmap_dir)
 
     def CheckExist(self, file):
         isinstance(file, str)
