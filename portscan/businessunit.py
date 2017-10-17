@@ -175,7 +175,7 @@ class BusinessUnit:
                     else:
                         # create scan object
                         self.sets.append(line.strip(' \t\r\n'))
-                        if self.ports_bool == False and ':' in self.line:
+                        if self.ports_bool is False and ':' in self.line:
                             self.ports_bool = True
 
         except IOError:
@@ -185,7 +185,7 @@ class BusinessUnit:
 
     def Scan(self):
         """Execute scanning commands held in ScanObjects. Uses forking and waits on PID returns."""
-        if self.ports_bool == False:
+        if not self.ports_bool:
             log.send_log("No ports specified for scanning")
             exit(0)
 
