@@ -10,6 +10,7 @@ import os
 from libnmap.process import NmapProcess
 from libnmap.parser import NmapParser
 from queue import Queue
+from shutil import copyfile
 from threading import Thread
 
 __all__ = [
@@ -274,11 +275,13 @@ class BusinessUnit:
         out = self.ParseOutput(business_path)
         self.outfile = self.nmap_dir + "output-" + self.business_unit + ".csv";
 
-        try:
-            os.system("cp " + self.outfile + " " + self.nmap_dir + "output-" + self.business_unit + ".bak")
-            print("Successfully copied backup")
-        except:
-            print("Unsuccessfully copied backup")
+        if os.path.exists(self.outfile):
+            try:
+                dest = self.nmap_dir + "output-" + self.business_unit + ".bak"
+                copyfile(self.outfile, dest)
+                print("Successfully copied backup")
+            except:
+                print("Unsuccessfully copied backup")
 
         with open(self.outfile, 'w') as f:
             for line in out:
