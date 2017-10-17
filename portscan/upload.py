@@ -94,7 +94,7 @@ def UploadToDropbox(files, folder_dest):
 
 
 def GetShareableLink(path, DROP_BOX_API):
-    """ Privated Helper Function that returns a shareable link to the file denoted by 'path'"""
+    """ Private Helper Function that returns a shareable link to the file denoted by 'path'"""
     isinstance(path, str)
 
     auth = 'Bearer ' + DROP_BOX_API

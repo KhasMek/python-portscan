@@ -76,7 +76,7 @@ class BusinessUnit:
         self.config_dir = self.ports_file = self.ip_file = self.nmap_dir = self.ports = self.outfile = ""
         self.CheckDeps()
 
-    # Check that all neccessary configuration dependancies exist
+    # Check that all necessary configuration dependencies exist
     def CheckDeps(self):
         """ Private Method that depends on self.path existing in the object. """
         if self.path == "":
@@ -205,11 +205,11 @@ class BusinessUnit:
             queue.put((obj.command['target'], obj.command['options']))
         queue.join()
 
-    def ParseOutput(self, buisness_path=""):
+    def ParseOutput(self, business_path=""):
         """Parse and assemble human readable csv report of all nmap results. """
-        if len(buisness_path) > 0:
+        if len(business_path) > 0:
             master_dict = {}
-            with open(buisness_path, "r") as f:
+            with open(business_path, "r") as f:
                 for line in f:
                     test = line.strip(' \n\t\r')
                     test = test.split(',')
@@ -243,7 +243,7 @@ class BusinessUnit:
                         out = [scanned_hosts.address, str(nmap_obj.port), nmap_obj.state, nmap_obj.service]
 
                         # append business type
-                        if len(buisness_path) > 0:
+                        if len(business_path) > 0:
                             out.append(master_dict.get(scanned_hosts.address, "") + "")
                         else:
                             out.append("")
@@ -265,12 +265,12 @@ class BusinessUnit:
             log.send_log("File " + obj.outfile + " parsed.")
         return master_out
 
-    def Collect(self, buisness_path=""):
+    def Collect(self, business_path=""):
         """ Calls ParseOutput to collect all output into a readable csv.
         Generates HTML Generation and Uploading to DropBox. """
-        isinstance(buisness_path, str)
+        isinstance(business_path, str)
 
-        out = self.ParseOutput(buisness_path)
+        out = self.ParseOutput(business_path)
         self.outfile = self.nmap_dir + "output-" + self.business_unit + ".csv";
 
         try:

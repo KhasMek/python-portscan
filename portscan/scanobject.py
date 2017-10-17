@@ -5,7 +5,7 @@ __all__ = [
 
 class ScanObject:
     def __init__(self):
-        """Contructor of object containing a single nmap scan entity."""
+        """Constructor of object containing a single nmap scan entity."""
         self.start_ip = self.subnet = self.range = self.ports = ""
         self.command = ""
         self.outfile = ""
