@@ -81,7 +81,8 @@ class BusinessUnit:
         """ Private Method that depends on self.path existing in the object. """
         if self.path == "":
             log.send_log(
-                "CheckDeps called on " + self.business_unit + " object but does not contain a self.path defined variable. ")
+                "CheckDeps called on " + self.business_unit +
+                " object but does not contain a self.path defined variable. ")
             exit(0)
 
         self.config_dir = self.path + "config/"
