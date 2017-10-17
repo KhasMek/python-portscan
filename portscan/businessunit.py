@@ -62,7 +62,7 @@ class BusinessUnit:
         self.org = p_org
 
         # Object populates this when Reading configs
-        self.machine_count = 0;
+        self.machine_count = 0
         self.live_host = 0
         self.exclude_string = ""
         self.sets = []
@@ -273,7 +273,7 @@ class BusinessUnit:
         isinstance(business_path, str)
 
         out = self.ParseOutput(business_path)
-        self.outfile = self.nmap_dir + "output-" + self.business_unit + ".csv";
+        self.outfile = self.nmap_dir + "output-" + self.business_unit + ".csv"
 
         if os.path.exists(self.outfile):
             try:

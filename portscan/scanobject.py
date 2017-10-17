@@ -33,7 +33,7 @@ class ScanObject:
         # Parse any individual ports
         if ':' in line:
             line = line.split(':')
-            self.ports = line[1];
+            self.ports = line[1]
             # trim any trailing commas
             while self.ports[-1] == ',':
                 self.ports = self.ports[:-1]
