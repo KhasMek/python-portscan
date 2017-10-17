@@ -1,9 +1,9 @@
-from . import log
+from portscan import log
 
-import os
-import dropbox
-import requests
 import datetime
+import dropbox
+import os
+import requests
 import time
 
 __all__ = [

@@ -1,10 +1,10 @@
-from . import log
+from portscan import log
 
 import datetime
-import time
-from yattag import Doc
-from yattag import indent
 import fileinput
+import time
+
+from yattag import Doc, indent
 
 __all__ = [
     'GenerateHTML'

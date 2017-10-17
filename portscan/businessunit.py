@@ -1,8 +1,8 @@
 # User Defined Modules
-from . import htmlgenerator
-from . import log
-from . import scanobject
-from . import upload
+from portscan import htmlgenerator
+from portscan import log
+from portscan import scanobject
+from portscan import upload
 
 # Standard Library Modules
 import os
