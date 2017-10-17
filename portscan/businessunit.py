@@ -185,7 +185,7 @@ class BusinessUnit:
         log.send_log("Finished reading Commands")
 
     def Scan(self):
-        """Execute scanning commands held in ScanObjects. Uses forking and waits on PID returns."""
+        """Execute scanning commands held in ScanObjects. Uses libnmap and threading to initiate scans."""
         if not self.ports_bool:
             log.send_log("No ports specified for scanning")
             exit(0)
